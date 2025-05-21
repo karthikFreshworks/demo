@@ -37,6 +37,7 @@ pipeline {
         }
         success {
             echo 'Build succeeded!'
+            slackSend(channel: '#freddy-insights-alerts', message: 'Build succeeded!')
         }
         failure {
             echo 'Build failed!'
