@@ -38,7 +38,7 @@ pipeline {
         }
         success {
             echo 'Build succeeded!'
-            slackSend channel: "#fp-jenkins", color: "#32cd30", message: "Deployment Successful : ${env.JOB_NAME} ; BUILD_NO: ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", teamDomain: "fwbuzz"
+            slackSend channel: "#fp-jenkins", color: "#", message: "Deployment Successful : #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", teamDomain: "fwbuzz"
 
         }
         failure {
