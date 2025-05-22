@@ -20,7 +20,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                slackSend channel: "#fp-jenkins", color: "#32cd30", message: "Deployment Initiated by ${env.by} on ${env} ; BUILD_NO: ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", teamDomain: "fwbuzz"
+                slackSend channel: "#fp-jenkins", color: "#32cd30", message: "Deployment Initiated by ${env.BUILD_USER} on ${env} ; BUILD_NO: ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", teamDomain: "fwbuzz"
                 sh './mvnw clean install -DskipTests'
             }
         }
