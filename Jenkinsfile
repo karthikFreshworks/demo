@@ -19,6 +19,7 @@ pipeline {
         }
 
         stage('Build') {
+            slackSend channel: "#fp-jenkins", color: "#32cd30", message: "Deployment Initiated by ${env.by} on ${env} ; BUILD_NO: ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", teamDomain: "fwbuzz"
             steps {
                 sh './mvnw clean install -DskipTests'
             }
@@ -37,7 +38,7 @@ pipeline {
         }
         success {
             echo 'Build succeeded!'
-            slackSend channel: "#fp-jenkins", color: "#FFFF00", message: "Deployment Successful : ${env.JOB_NAME} ; BUILD_NO: ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", teamDomain: "fwbuzz"
+            slackSend channel: "#fp-jenkins", color: "#32cd30", message: "Deployment Successful : ${env.JOB_NAME} ; BUILD_NO: ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", teamDomain: "fwbuzz"
 
         }
         failure {
