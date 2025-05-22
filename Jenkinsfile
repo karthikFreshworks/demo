@@ -37,7 +37,8 @@ pipeline {
         }
         success {
             echo 'Build succeeded!'
-            slackSend(channel: '#freddy-insights-alerts', message: 'Build succeeded!')
+            slackSend channel: "#fp-jenkins", color: "#FFFF00", message: "Deployment Successful : ${env.JOB_NAME} ; BUILD_NO: ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", teamDomain: "fwbuzz"
+
         }
         failure {
             echo 'Build failed!'
