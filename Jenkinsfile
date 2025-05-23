@@ -32,14 +32,7 @@ pipeline {
                         def repo = env.REPO
 
                         def mainMessage = """
-                        *Pipeline initiated by* `${env.INITIATED_BY}` *on* `${env.GIT_BRANCH}`.
-
-                        *Artifact:* ${env.ARTIFACT}
-                        *Version:* ${version}
-                        *Repo:* <${repo}>
-                        *Namespace:* ${env.NAMESPACE}
-                        *Pipeline:* :stars: Visualize to troubleshoot
-                        """
+*Pipeline initiated by* `${env.INITIATED_BY}` *on* `${env.GIT_BRANCH}`.\n*Artifact:* ${env.ARTIFACT}\n*Version:* ${version}\n*Repo:* <${repo}>\n*Namespace:* ${env.NAMESPACE}\n*Pipeline:* :stars: Visualize to troubleshoot"""
 
                         // Send the parent message
                         sh(
