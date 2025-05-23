@@ -35,7 +35,7 @@ pipeline {
                         def mainMessage = "*Pipeline initiated by* <${env.SLACK_PROFILE_URL}|${env.INITIATED_BY}> *on* <${env.REPO}|${env.GIT_BRANCH}>.\n>*Artifact:* ${env.ARTIFACT}\n>*Version:* ${version}\n>*Repo:* <${repo}>\n>*Namespace:* ${env.NAMESPACE}\n>*Pipeline:* :stars: Visualize to troubleshoot"
 
                         // Send the parent message
-                        sh(
+                        def response = sh(
                             script: """
                                 curl -s -X POST $SLACK_WEBHOOK_URL \
                                 -H 'Content-type: application/json' \
