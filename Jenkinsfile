@@ -24,8 +24,8 @@ pipeline {
 
     stages {
         stage('Init Thread') {
-
-                steps {
+            steps {
+                withCredentials([string(credentialsId: 'slack-webhook-URL', variable: 'SLACK_WEBHOOK_URL')]) {
                     script{
                         def gitBranch = env.GIT_BRANCH ?: sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
                         def version = "0.0.1-${env.BUILD_ID}"
@@ -44,7 +44,7 @@ pipeline {
                         // Send the parent message
                         sh(
                             script: """
-                                curl -s -X POST https://hooks.slack.com/services/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 \
+                                curl -s -X POST $SLACK_WEBHOOK_URL \
                                 -H 'Content-type: application/json' \
                                 --data '{
                                     "channel": "${SLACK_CHANNEL}",
@@ -53,10 +53,10 @@ pipeline {
                             """,
                             returnStdout: true
                         ).trim()
-
                     }
                 }
             }
+        }
         stage('Checkout') {
             steps {
                 checkout scm
