@@ -24,6 +24,7 @@ pipeline {
 
     stages {
         stage('Init Thread') {
+        
                 steps {
                     script{
                         def gitBranch = env.GIT_BRANCH ?: sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
