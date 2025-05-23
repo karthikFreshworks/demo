@@ -24,7 +24,7 @@ pipeline {
 
     stages {
         stage('Init Thread') {
-        
+
                 steps {
                     script{
                         def gitBranch = env.GIT_BRANCH ?: sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
@@ -44,7 +44,7 @@ pipeline {
                         // Send the parent message
                         sh(
                             script: """
-                                curl -s -X POST https://hooks.slack.com/services/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 \
+                                curl -s -X POST https://hooks.slack.com/services/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 \
                                 -H 'Content-type: application/json' \
                                 --data '{
                                     "channel": "${SLACK_CHANNEL}",
