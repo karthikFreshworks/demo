@@ -12,7 +12,7 @@ pipeline {
         INITIATED_BY = 'k0k079e'
         ARTIFACT = 'freddy-insights'
         VERSION = '1.0.0'
-        REPO = 'https://github.com/karthikFreshworks/demo/tree/feature/demo'
+        REPO = 'https://github.com/karthikFreshworks/demo'
         NAMESPACE = 'n134370480'
         PIPELINE_TEXT = 'Visualize to troubleshoot'
         PIPELINE_ICON = ':stars:'
@@ -36,7 +36,7 @@ pipeline {
 
                         *Artifact:* ${env.ARTIFACT}
                         *Version:* ${version}
-                        *Repo:* <${repo}|Git Repo>
+                        *Repo:* <${repo}>
                         *Namespace:* ${env.NAMESPACE}
                         *Pipeline:* :stars: Visualize to troubleshoot
                         """
