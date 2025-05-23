@@ -16,6 +16,7 @@ pipeline {
         NAMESPACE = 'n134370480'
         PIPELINE_TEXT = 'Visualize to troubleshoot'
         PIPELINE_ICON = ':stars:'
+        SLACK_PROFILE_URL = 'https://fwbuzz.slack.com/team/U08N4D19SCC'
     }
 
     triggers {
@@ -31,7 +32,7 @@ pipeline {
                         def version = "0.0.1-${env.BUILD_ID}"
                         def repo = env.REPO
 
-                        def mainMessage = "*Pipeline initiated by* *<${env.INITIATED_BY}>* *on* `${env.GIT_BRANCH}`.\n>*Artifact:* freddy-insights\n>*Version:* 0.0.1-${env.BUILD_ID}\n>*Repo:* <${repo}>\n>*Namespace:* n134370480\n>*Pipeline:* :stars: Visualize to troubleshoot"
+                        def mainMessage = "*Pipeline initiated by* <${env.SLACK_PROFILE_URL}|${env.INITIATED_BY}> *on* <${env.REPO}|${env.GIT_BRANCH}> (profile: <${env.SLACK_PROFILE_URL}|${env.INITIATED_BY}>).\n>*Artifact:* ${env.ARTIFACT}\n>*Version:* ${version}\n>*Repo:* <${repo}>\n>*Namespace:* ${env.NAMESPACE}\n>*Pipeline:* :stars: Visualize to troubleshoot"
 
                         // Send the parent message
                         sh(
