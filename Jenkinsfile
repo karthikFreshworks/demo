@@ -80,8 +80,6 @@ pipeline {
         }
         success {
             echo 'Build succeeded!'
-            slackSend channel: "#fp-jenkins", color: "#32cd30", message: "Deployment Successful : #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", teamDomain: "fwbuzz"
-
         }
         failure {
             echo 'Build failed!'
