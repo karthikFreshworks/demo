@@ -41,7 +41,7 @@ pipeline {
                         """
 
                         // Send the parent message
-                        def response = sh(
+                        sh(
                             script: """
                                 curl -s -X POST https://hooks.slack.com/services/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 \
                                 -H 'Content-type: application/json' \
@@ -53,8 +53,6 @@ pipeline {
                             returnStdout: true
                         ).trim()
 
-                        def json = readJSON text: response
-                        env.SLACK_THREAD_TS = json.ts
                     }
                 }
             }
@@ -91,3 +89,4 @@ pipeline {
         }
     }
 }
+
