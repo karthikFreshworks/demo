@@ -46,6 +46,8 @@ pipeline {
                             """,
                             returnStdout: true
                         ).trim()
+                        def json = readJSON text: response
+                        env.SLACK_THREAD_TS = json.ts
                     }
                 }
             }
@@ -58,6 +60,23 @@ pipeline {
 
         stage('Build') {
             steps {
+                withCredentials([string(credentialsId: 'slack-webhook-URL', variable: 'SLACK_WEBHOOK_URL')]) {
+                    script {
+                        def threadMessage = "Build started"
+                        sh(
+                            script: """
+                                curl -s -X POST $SLACK_WEBHOOK_URL \
+                                -H 'Content-type: application/json' \
+                                --data '{
+                                    "channel": "${SLACK_CHANNEL}",
+                                    "text": "${threadMessage}",
+                                    "thread_ts": "${env.SLACK_THREAD_TS}"
+                                }'
+                            """,
+                            returnStdout: true
+                        ).trim()
+                    }
+                }
                 sh './mvnw clean install -DskipTests'
             }
         }
