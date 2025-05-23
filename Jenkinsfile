@@ -31,7 +31,7 @@ pipeline {
                         def version = "0.0.1-${env.BUILD_ID}"
                         def repo = env.REPO
 
-                        def mainMessage = "*Pipeline initiated by* <span style='color:#36a3f7'><b>${env.INITIATED_BY}</b></span> *on* <span style='color:#36a3f7'><b>${env.GIT_BRANCH}</b></span>.\n>*Artifact:* freddy-insights\n>*Version:* 0.0.1-${env.BUILD_ID}\n>*Repo:* <${repo}>\n>*Namespace:* n134370480\n>*Pipeline:* :stars: Visualize to troubleshoot"
+                        def mainMessage = ">*Pipeline initiated by* `${env.INITIATED_BY}` *on* `${env.GIT_BRANCH}`.\n>*Artifact:* freddy-insights\n>*Version:* 0.0.1-${env.BUILD_ID}\n>*Repo:* <${repo}>\n>*Namespace:* n134370480\n>*Pipeline:* :stars: Visualize to troubleshoot"
 
                         // Send the parent message
                         sh(
