@@ -60,23 +60,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                withCredentials([string(credentialsId: 'slack-bot-token', variable: 'SLACK_BOT_TOKEN')]) {
-                    script {
-                        def threadMessage = "Build started"
-                        sh(
-                            script: """
-                                curl -s -X POST https://slack.com/api/chat.postMessage \
-                                -H 'Content-type: application/json' \
-                                -H 'Authorization: Bearer $SLACK_BOT_TOKEN' \
-                                --data '{
-                                    "channel": "${SLACK_CHANNEL}",
-                                    "text": "${threadMessage}",
-                                    "thread_ts": "${env.SLACK_THREAD_TS}"
-                                }'
-                            """,
-                            returnStdout: true
-                        ).trim()
-                    }
+                script {
+                    sendSlackThreadMessage("Build started on ${env.GIT_BRANCH} branch", env.SLACK_THREAD_TS)
                 }
                 sh './mvnw clean install -DskipTests'
             }
@@ -104,3 +89,20 @@ pipeline {
     }
 }
 
+def sendSlackThreadMessage(String message, String threadTs) {
+    withCredentials([string(credentialsId: 'slack-bot-token', variable: 'SLACK_BOT_TOKEN')]) {
+        sh(
+            script: """
+                curl -s -X POST https://slack.com/api/chat.postMessage \
+                -H 'Content-type: application/json' \
+                -H 'Authorization: Bearer $SLACK_BOT_TOKEN' \
+                --data '{
+                    "channel": "${SLACK_CHANNEL}",
+                    "text": "${message}",
+                    "thread_ts": "${threadTs}"
+                }'
+            """,
+            returnStdout: true
+        ).trim()
+    }
+}
