@@ -26,19 +26,20 @@ pipeline {
     stages {
         stage('Init Thread') {
             steps {
-                withCredentials([string(credentialsId: 'slack-webhook-URL', variable: 'SLACK_WEBHOOK_URL')]) {
-                    script{
+                withCredentials([string(credentialsId: 'slack-bot-token', variable: 'SLACK_BOT_TOKEN')]) {
+                    script {
                         def gitBranch = env.GIT_BRANCH ?: sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
                         def version = "0.0.1-${env.BUILD_ID}"
                         def repo = env.REPO
 
                         def mainMessage = "*Pipeline initiated by* <${env.SLACK_PROFILE_URL}|${env.INITIATED_BY}> *on* <${env.REPO}|${env.GIT_BRANCH}>.\n>*Artifact:* ${env.ARTIFACT}\n>*Version:* ${version}\n>*Repo:* <${repo}>\n>*Namespace:* ${env.NAMESPACE}\n>*Pipeline:* :stars: Visualize to troubleshoot"
 
-                        // Send the parent message
+                        // Send the parent message using Slack API (chat.postMessage)
                         def response = sh(
                             script: """
-                                curl -s -X POST $SLACK_WEBHOOK_URL \
+                                curl -s -X POST https://slack.com/api/chat.postMessage \
                                 -H 'Content-type: application/json' \
+                                -H 'Authorization: Bearer $SLACK_BOT_TOKEN' \
                                 --data '{
                                     "channel": "${SLACK_CHANNEL}",
                                     "text": "${mainMessage.replace("\n", "\\n").replace("\"", "\\\"")}"
@@ -60,13 +61,14 @@ pipeline {
 
         stage('Build') {
             steps {
-                withCredentials([string(credentialsId: 'slack-webhook-URL', variable: 'SLACK_WEBHOOK_URL')]) {
+                withCredentials([string(credentialsId: 'slack-bot-token', variable: 'SLACK_BOT_TOKEN')]) {
                     script {
                         def threadMessage = "Build started"
                         sh(
                             script: """
-                                curl -s -X POST $SLACK_WEBHOOK_URL \
+                                curl -s -X POST https://slack.com/api/chat.postMessage \
                                 -H 'Content-type: application/json' \
+                                -H 'Authorization: Bearer $SLACK_BOT_TOKEN' \
                                 --data '{
                                     "channel": "${SLACK_CHANNEL}",
                                     "text": "${threadMessage}",
@@ -102,4 +104,7 @@ pipeline {
         }
     }
 }
+
+
+
 
