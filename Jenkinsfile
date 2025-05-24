@@ -18,7 +18,6 @@ pipeline {
         PIPELINE_ICON = ':stars:'
         SLACK_PROFILE_URL = 'https://fwbuzz.slack.com/team/U08N4D19SCC'
     }
-
     triggers {
         githubPush() // Trigger builds on push events
     }
