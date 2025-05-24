@@ -16,9 +16,6 @@ pipeline {
         PIPELINE_TEXT = 'Visualize to troubleshoot'
         PIPELINE_ICON = ':stars:'
         SLACK_PROFILE_URL = 'https://fwbuzz.slack.com/team/U08N4D19SCC'
-        REPO_URL = sh(script: "git config --get remote.origin.url", returnStdout: true).trim()
-        BRANCH = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
-        REPO_WITH_BRANCH = "${repoUrl}@${branch}"
     }
     triggers {
         githubPush() // Trigger builds on push events
@@ -29,6 +26,13 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'slack-bot-token', variable: 'SLACK_BOT_TOKEN')]) {
                     script {
+                        def repoUrl = sh(script: "git config --get remote.origin.url", returnStdout: true).trim()
+                        def branch = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+                        def repoWithBranch = "${repoUrl}@${branch}"
+                        env.REPO_URL = repoUrl
+                        env.BRANCH = branch
+                        env.REPO_WITH_BRANCH = repoWithBranch
+                        
                         // Initialize the Slack thread with a main message
                         def rawBranch = env.BRANCH_NAME ?: sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
                         env.GIT_BRANCH = rawBranch.replaceFirst('^origin/', '')
