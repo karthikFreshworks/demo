@@ -8,7 +8,8 @@ pipeline {
       }
     environment {
         SLACK_CHANNEL = '#freddy-insights-alerts'
-
+        def rawBranch = env.BRANCH_NAME ?: sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+        env.GIT_BRANCH = rawBranch.replaceFirst('^origin/', '')
         INITIATED_BY = 'k0k079e'
         ARTIFACT = 'freddy-insights'
         VERSION = '1.0.0'
@@ -28,10 +29,7 @@ pipeline {
                 withCredentials([string(credentialsId: 'slack-bot-token', variable: 'SLACK_BOT_TOKEN')]) {
                     script {
                         // Initialize the Slack thread with a main message
-                        def rawBranch = env.BRANCH_NAME ?: sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
-                        echo "Raw branch after checkout: ${rawBranch}"
-                        env.GIT_BRANCH = rawBranch.replaceFirst('^origin/', '')
-                        echo "GIT_BRANCH after checkout: ${env.GIT_BRANCH}"
+
                         def version = "0.0.1-${env.BUILD_ID}"
                         def repo = env.REPO
                         def mainMessage = "*Pipeline initiated by* <${env.SLACK_PROFILE_URL}|${env.INITIATED_BY}> *on* <${env.REPO}|${env.GIT_BRANCH}>.\n>*Artifact:* ${env.ARTIFACT}\n>*Version:* ${version}\n>*Repo:* <${repo}>\n>*Namespace:* ${env.NAMESPACE}\n>*Pipeline:* :stars: Visualize to troubleshoot"
