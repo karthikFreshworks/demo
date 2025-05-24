@@ -73,7 +73,7 @@ pipeline {
                 }
                 sh './mvnw clean verify' // runs tests and generates JaCoCo report
                 jacoco execPattern: '**/target/jacoco.exec'
-                jacoco minimumBranchCoverage: '0.80', minimumInstructionCoverage: '0.80'
+                jacoco minimumBranchCoverage: '0.80', minimumInstructionCoverage: '0.80', minimumClassCoverage: '0.80'
             }
         }
 
