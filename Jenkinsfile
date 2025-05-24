@@ -27,12 +27,10 @@ pipeline {
                 withCredentials([string(credentialsId: 'slack-bot-token', variable: 'SLACK_BOT_TOKEN')]) {
                     script {
                         def repoUrl = sh(script: "git config --get remote.origin.url", returnStdout: true).trim()
-                        def branch = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+                        def branch = env.BRANCH_NAME ?: sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
                         def repoWithBranch = "${repoUrl}@${branch}"
                         env.REPO_URL = repoUrl
-                        env.BRANCH = branch
-                        env.REPO_WITH_BRANCH = repoWithBranch
-                        
+
                         // Initialize the Slack thread with a main message
                         def rawBranch = env.BRANCH_NAME ?: sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
                         env.GIT_BRANCH = rawBranch.replaceFirst('^origin/', '')
@@ -108,5 +106,26 @@ def sendSlackThreadMessage(String message, String threadTs) {
             """,
             returnStdout: true
         ).trim()
+    }
+}
+
+def setSlackProfileUrlByEmail(String userEmail, String workspace) {
+    withCredentials([string(credentialsId: 'slack-bot-token', variable: 'SLACK_BOT_TOKEN')]) {
+        def response = sh(
+            script: """
+                curl -s -X POST https://slack.com/api/users.lookupByEmail \
+                -H 'Authorization: Bearer $SLACK_BOT_TOKEN' \
+                -H 'Content-type: application/x-www-form-urlencoded' \
+                --data-urlencode 'email=${userEmail}'
+            """,
+            returnStdout: true
+        ).trim()
+        def json = readJSON text: response
+        def userId = json.user?.id
+        if (userId) {
+            env.SLACK_PROFILE_URL = "https://${workspace}.slack.com/team/${userId}"
+        } else {
+            error("Could not fetch Slack user ID for email: ${userEmail}")
+        }
     }
 }
