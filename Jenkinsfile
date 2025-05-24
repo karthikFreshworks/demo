@@ -8,7 +8,7 @@ pipeline {
       }
     environment {
         SLACK_CHANNEL = '#freddy-insights-alerts'
-        GIT_BRANCH = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+        GIT_BRANCH = env.BRANCH_NAME ?: sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
         INITIATED_BY = 'k0k079e'
         ARTIFACT = 'freddy-insights'
         VERSION = '1.0.0'
@@ -21,7 +21,7 @@ pipeline {
     triggers {
         githubPush() // Trigger builds on push events
     }
-    
+
     stages {
         stage('Init Thread') {
             steps {
