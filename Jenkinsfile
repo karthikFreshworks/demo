@@ -21,7 +21,6 @@ pipeline {
     triggers {
         githubPush() // Trigger builds on push events
     }
-
     stages {
         stage('Init Thread') {
             steps {
