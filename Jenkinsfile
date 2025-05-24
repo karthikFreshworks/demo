@@ -29,8 +29,7 @@ pipeline {
                     script {
                         // Initialize the Slack thread with a main message
                         def rawBranch = env.BRANCH_NAME ?: sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
-                        env.GIT_BRANCH = rawBranch.replaceFirst(/^origin\//, '')
-                        def gitBranch = env.GIT_BRANCH
+                        env.GIT_BRANCH = rawBranch.replaceFirst('^origin/', '')
                         def version = "0.0.1-${env.BUILD_ID}"
                         def repo = env.REPO
                         def mainMessage = "*Pipeline initiated by* <${env.SLACK_PROFILE_URL}|${env.INITIATED_BY}> *on* <${env.REPO}|${env.GIT_BRANCH}>.\n>*Artifact:* ${env.ARTIFACT}\n>*Version:* ${version}\n>*Repo:* <${repo}>\n>*Namespace:* ${env.NAMESPACE}\n>*Pipeline:* :stars: Visualize to troubleshoot"
