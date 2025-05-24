@@ -31,9 +31,6 @@ pipeline {
                         def repoWithBranch = "${repoUrl}@${branch}"
                         env.REPO_URL = repoUrl
 
-                        // Initialize the Slack thread with a main message
-                        def rawBranch = env.BRANCH_NAME ?: sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
-                        env.GIT_BRANCH = rawBranch.replaceFirst('^origin/', '')
                         def version = "0.0.1-${env.BUILD_ID}"
                         def mainMessage = "*Pipeline initiated by* <${env.SLACK_PROFILE_URL}|${env.INITIATED_BY}> *on* <${env.REPO}|${env.GIT_BRANCH}>.\n>*Artifact:* ${env.ARTIFACT}\n>*Version:* ${version}\n>*Repo:* <${repoUrl}>\n>*Namespace:* ${env.NAMESPACE}\n>*Pipeline:* :stars: Visualize to troubleshoot"
                         // Send the parent message using Slack API (chat.postMessage)
@@ -64,7 +61,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    sendSlackThreadMessage("Build started on ${env.GIT_BRANCH} branch", env.SLACK_THREAD_TS)
+                    sendSlackThreadMessage("Build started on *${env.GIT_BRANCH}* branch", env.SLACK_THREAD_TS)
                 }
                 sh './mvnw clean install -DskipTests'
             }
