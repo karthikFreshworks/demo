@@ -63,7 +63,7 @@ pipeline {
                 script {
                     sendSlackThreadMessage("Build started on *${env.GIT_BRANCH}* branch", env.SLACK_THREAD_TS)
                 }
-                sh './mvnw clean install -DskipTests'
+                sh './mvnw clean install'
             }
         }
         stage('Test & Coverage') {
