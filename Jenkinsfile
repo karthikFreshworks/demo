@@ -66,6 +66,16 @@ pipeline {
                 sh './mvnw clean install -DskipTests'
             }
         }
+        stage('Test & Coverage') {
+            steps {
+                script {
+                    sendSlackThreadMessage("Sonar Coverage validation started", env.SLACK_THREAD_TS)
+                }
+                sh './mvnw clean verify' // runs tests and generates JaCoCo report
+                jacoco execPattern: '**/target/jacoco.exec'
+                jacoco minimumBranchCoverage: '0.80', minimumInstructionCoverage: '0.80'
+            }
+        }
 
         stage('Deploy') {
             steps {
