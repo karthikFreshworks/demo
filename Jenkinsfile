@@ -28,7 +28,8 @@ pipeline {
                 withCredentials([string(credentialsId: 'slack-bot-token', variable: 'SLACK_BOT_TOKEN')]) {
                     script {
                         // Initialize the Slack thread with a main message
-                        env.GIT_BRANCH = env.BRANCH_NAME ?: sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+                        def rawBranch = env.BRANCH_NAME ?: sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+                        env.GIT_BRANCH = rawBranch.replaceFirst(/^origin\//, '')
                         def gitBranch = env.GIT_BRANCH
                         def version = "0.0.1-${env.BUILD_ID}"
                         def repo = env.REPO
