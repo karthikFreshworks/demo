@@ -8,7 +8,7 @@ pipeline {
       }
     environment {
         SLACK_CHANNEL = '#freddy-insights-alerts'
-        GIT_BRANCH = 'develop'
+        GIT_BRANCH = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
         INITIATED_BY = 'k0k079e'
         ARTIFACT = 'freddy-insights'
         VERSION = '1.0.0'
