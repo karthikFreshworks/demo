@@ -20,7 +20,6 @@ pipeline {
     }
     triggers {
         githubPush() // Trigger builds on push events
-        pollSCM('H/5 * * * *')
     }
 
     stages {
